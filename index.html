@@ -1,1 +1,37 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My PDF Library</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <script type="module" src="JS/pdfjs-viewer-element.js"></script>
+</head>
+<body>
+  <div class="header">
+    <h1>📚 My PDF Library</h1>
+    <label class="switch">
+      <input type="checkbox" id="darkModeToggle" />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <p class="subtext">Search and continue reading where you left off:</p>
+  <input type="text" id="searchBox" onkeyup="searchBooks()" placeholder="🔍 Search books..." />
+
+  <ul class="pdf-list" id="pdfList">
+    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Book_One.pdf')">Book_One.pdf</a></li>
+    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Guide_to_Linux.pdf')">Guide_to_Linux.pdf</a></li>
+    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Python_Tutorial.pdf')">Python_Tutorial.pdf</a></li>
+    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Gaming_Secrets.pdf')">Gaming_Secrets.pdf</a></li>
+  </ul>
+
+  <pdfjs-viewer-element
+    id="pdfViewerComponent"
+    src=""
+    viewer-path="JS"
+    viewer-css-theme="LIGHT">
+  </pdfjs-viewer-element>
+
+  <script src="JS/script.js"></script>
+</body>
+</html>
