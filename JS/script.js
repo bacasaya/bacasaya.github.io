@@ -4,7 +4,7 @@ const toggle = document.getElementById('darkModeToggle');
 const books = [
   "(Smart Sensors, Measurement and Instrumentation) Alice James, Avishkar Seth, Subhas Chandra Mukhopadhyay - IoT System Design_ Project Based Approach. 41-Springer (2021).pdf",
   "machine-learning-algorithm.pdf",
-  "test"
+  "test.pdf"
 ];
 
 // === DARK MODE ===
