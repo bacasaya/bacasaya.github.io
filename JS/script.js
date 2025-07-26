@@ -2,16 +2,9 @@ const toggle = document.getElementById('darkModeToggle');
 
 // === BOOK LIST ===
 const books = [
-  "Book_One.pdf",
-  "Guide_to_Linux.pdf",
-  "Python_Tutorial.pdf",
-  "Gaming_Secrets.pdf",
-  "Advanced_AI.pdf",
-  "C_Programming.pdf",
-  "Excel_Secrets.pdf",
-  "A_Quick_Guide.pdf",
-  "Data_Structures.pdf"
-  "test.pdf"
+  "(Smart Sensors, Measurement and Instrumentation) Alice James, Avishkar Seth, Subhas Chandra Mukhopadhyay - IoT System Design_ Project Based Approach. 41-Springer (2021).pdf",
+  "machine-learning-algorithm.pdf",
+  "test"
 ];
 
 // === DARK MODE ===
