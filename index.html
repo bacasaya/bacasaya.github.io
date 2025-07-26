@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <title>My PDF Library</title>
   <link rel="stylesheet" href="CSS/style.css" />
-  <script type="module" src="JS/pdfjs-viewer-element.js"></script>
+  <!-- Load PDF.js viewer component from local JS folder -->
+  <script type="module" src="JS/pdfjs-viewer-element.min.js"></script>
 </head>
 <body>
   <div class="header">
@@ -28,7 +29,6 @@
   <pdfjs-viewer-element
     id="pdfViewerComponent"
     src=""
-    viewer-path="JS"
     viewer-css-theme="LIGHT">
   </pdfjs-viewer-element>
 
