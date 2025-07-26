@@ -26,14 +26,14 @@ function loadPDF(filePath) {
         viewer.src = `${filePath}#page=1`;
     }
 
-    // Set theme on open
+    // Apply current theme
     const theme = document.body.classList.contains('dark') ? 'DARK' : 'LIGHT';
     viewer.setAttribute('viewer-css-theme', theme);
 
     localStorage.setItem('current_pdf', filePath);
 }
 
-// Approximate progress tracking (every 5s)
+// Track current page every 5 seconds (approx)
 setInterval(() => {
     const filePath = localStorage.getItem('current_pdf');
     if (filePath && viewer.src.includes(filePath)) {
@@ -44,7 +44,7 @@ setInterval(() => {
     }
 }, 5000);
 
-// 🌙 Dark Mode Toggle
+// Apply saved dark mode preference
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
     document.body.classList.add('dark');
@@ -54,6 +54,7 @@ if (savedTheme === 'dark') {
     viewer.setAttribute('viewer-css-theme', 'LIGHT');
 }
 
+// Handle dark mode toggle
 toggle.addEventListener('change', () => {
     if (toggle.checked) {
         document.body.classList.add('dark');
