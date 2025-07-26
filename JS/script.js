@@ -11,6 +11,7 @@ const books = [
   "Excel_Secrets.pdf",
   "A_Quick_Guide.pdf",
   "Data_Structures.pdf"
+  "test.pdf"
 ];
 
 // === DARK MODE ===
