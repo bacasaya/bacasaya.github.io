@@ -1,68 +1,101 @@
-const viewer = document.getElementById('pdfViewerComponent');
 const toggle = document.getElementById('darkModeToggle');
 
-function searchBooks() {
-    const input = document.getElementById('searchBox').value.toLowerCase();
-    const items = document.querySelectorAll('.pdf-item');
+// === BOOK LIST ===
+const books = [
+  "Book_One.pdf",
+  "Guide_to_Linux.pdf",
+  "Python_Tutorial.pdf",
+  "Gaming_Secrets.pdf",
+  "Advanced_AI.pdf",
+  "C_Programming.pdf",
+  "Excel_Secrets.pdf",
+  "A_Quick_Guide.pdf",
+  "Data_Structures.pdf"
+];
 
-    items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(input) ? '' : 'none';
-    });
-}
-
-function loadPDF(filePath) {
-    const savedPage = localStorage.getItem(`pdf_${filePath}`);
-
-    if (savedPage) {
-        const continueReading = confirm(`Continue reading from page ${savedPage}?`);
-        if (continueReading) {
-            viewer.src = `${filePath}#page=${savedPage}`;
-        } else {
-            localStorage.removeItem(`pdf_${filePath}`);
-            viewer.src = `${filePath}#page=1`;
-        }
-    } else {
-        viewer.src = `${filePath}#page=1`;
-    }
-
-    // Apply current theme
-    const theme = document.body.classList.contains('dark') ? 'DARK' : 'LIGHT';
-    viewer.setAttribute('viewer-css-theme', theme);
-
-    localStorage.setItem('current_pdf', filePath);
-}
-
-// Track current page every 5 seconds (approx)
-setInterval(() => {
-    const filePath = localStorage.getItem('current_pdf');
-    if (filePath && viewer.src.includes(filePath)) {
-        const match = viewer.src.match(/#page=(\d+)/);
-        if (match) {
-            localStorage.setItem(`pdf_${filePath}`, match[1]);
-        }
-    }
-}, 5000);
-
-// Apply saved dark mode preference
+// === DARK MODE ===
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
+  toggle.checked = true;
+}
+toggle.addEventListener('change', () => {
+  if (toggle.checked) {
     document.body.classList.add('dark');
-    toggle.checked = true;
-    viewer.setAttribute('viewer-css-theme', 'DARK');
-} else {
-    viewer.setAttribute('viewer-css-theme', 'LIGHT');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.body.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+});
+
+// === SEARCH ===
+function searchBooks() {
+  const input = document.getElementById('searchBox').value.toLowerCase();
+  const items = document.querySelectorAll('.pdf-item');
+  items.forEach(item => {
+    const title = item.textContent.toLowerCase();
+    item.style.display = title.includes(input) ? '' : 'none';
+  });
 }
 
-// Handle dark mode toggle
-toggle.addEventListener('change', () => {
-    if (toggle.checked) {
-        document.body.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-        viewer.setAttribute('viewer-css-theme', 'DARK');
+// === GROUP & RENDER BOOKS ===
+function renderBooks() {
+  const bookListDiv = document.getElementById('bookList');
+  const grouped = {};
+
+  books.forEach(book => {
+    const letter = book[0].toUpperCase();
+    if (!grouped[letter]) grouped[letter] = [];
+    grouped[letter].push(book);
+  });
+
+  Object.keys(grouped).sort().forEach(letter => {
+    const section = document.createElement('div');
+
+    const header = document.createElement('div');
+    header.className = 'section-title';
+    header.textContent = `${letter} Section`;
+    section.appendChild(header);
+
+    const ul = document.createElement('ul');
+    ul.classList.add('pdf-list');
+
+    grouped[letter].forEach(book => {
+      const li = document.createElement('li');
+      li.classList.add('pdf-item');
+      const link = document.createElement('a');
+      link.href = "#";
+      link.textContent = book;
+      link.onclick = () => openPDF(book);
+      li.appendChild(link);
+      ul.appendChild(li);
+    });
+
+    section.appendChild(ul);
+    bookListDiv.appendChild(section);
+  });
+}
+
+// === OPEN PDF IN NEW TAB ===
+function openPDF(filePath) {
+  const savedPage = localStorage.getItem(`pdf_${filePath}`);
+
+  let target = `PDFs/${filePath}`;
+  if (savedPage) {
+    const continueReading = confirm(`Continue reading from page ${savedPage}?`);
+    if (continueReading) {
+      target += `#page=${savedPage}`;
     } else {
-        document.body.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-        viewer.setAttribute('viewer-css-theme', 'LIGHT');
+      localStorage.removeItem(`pdf_${filePath}`);
     }
-});
+  } else {
+    target += `#page=1`;
+  }
+
+  localStorage.setItem('current_pdf', filePath);
+  window.open(target, '_blank');
+}
+
+// === INIT ===
+renderBooks();
