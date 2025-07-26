@@ -1,36 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>My PDF Library</title>
-  <link rel="stylesheet" href="CSS/style.css" />
-  <!-- Load PDF.js viewer component from local JS folder -->
-  <script type="module" src="JS/pdfjs-viewer-element.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Baca Saya - PDF Library</title>
+  <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
   <div class="header">
-    <h1>📚 My PDF Library</h1>
+    <h1>Baca Saya - PDF Library</h1>
     <label class="switch">
-      <input type="checkbox" id="darkModeToggle" />
+      <input type="checkbox" id="darkModeToggle">
       <span class="slider"></span>
     </label>
   </div>
 
-  <p class="subtext">Search and continue reading where you left off:</p>
-  <input type="text" id="searchBox" onkeyup="searchBooks()" placeholder="🔍 Search books..." />
+  <input type="text" id="searchBox" onkeyup="searchBooks()" placeholder="Search books...">
 
-  <ul class="pdf-list" id="pdfList">
-    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Book_One.pdf')">Book_One.pdf</a></li>
-    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Guide_to_Linux.pdf')">Guide_to_Linux.pdf</a></li>
-    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Python_Tutorial.pdf')">Python_Tutorial.pdf</a></li>
-    <li class="pdf-item"><a href="#" onclick="loadPDF('PDFs/Gaming_Secrets.pdf')">Gaming_Secrets.pdf</a></li>
-  </ul>
-
-  <pdfjs-viewer-element
-    id="pdfViewerComponent"
-    src=""
-    viewer-css-theme="LIGHT">
-  </pdfjs-viewer-element>
+  <div id="bookList"></div>
 
   <script src="JS/script.js"></script>
 </body>
