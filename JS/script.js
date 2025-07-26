@@ -25,23 +25,41 @@ toggle.addEventListener('change', () => {
 
 // === SEARCH ===
 function searchBooks() {
-  const input = document.getElementById('searchBox').value.toLowerCase();
+  const input = document.getElementById('searchBox').value.toLowerCase().trim();
   const items = document.querySelectorAll('.pdf-item');
+  const headers = document.querySelectorAll('.section-title');
+
+  if (input === '') {
+    // Restore all items and headers
+    items.forEach(item => item.style.display = '');
+    headers.forEach(header => header.style.display = '');
+    return;
+  }
+
   items.forEach(item => {
     const title = item.textContent.toLowerCase();
     item.style.display = title.includes(input) ? '' : 'none';
   });
+
+  // Hide all section headers during search
+  headers.forEach(header => header.style.display = 'none');
 }
 
 // === GROUP & RENDER BOOKS ===
 function renderBooks() {
   const bookListDiv = document.getElementById('bookList');
+  if (!bookListDiv) return;
+  bookListDiv.innerHTML = ''; // clear before rendering
+
   const grouped = {};
 
   books.forEach(book => {
-    const letter = book[0].toUpperCase();
+    const trimmed = book.trim();
+    if (!trimmed) return;
+
+    const letter = trimmed[0].toUpperCase();
     if (!grouped[letter]) grouped[letter] = [];
-    grouped[letter].push(book);
+    grouped[letter].push(trimmed);
   });
 
   Object.keys(grouped).sort().forEach(letter => {
@@ -49,7 +67,7 @@ function renderBooks() {
 
     const header = document.createElement('div');
     header.className = 'section-title';
-    header.textContent = `${letter} Section`;
+    header.textContent = letter;
     section.appendChild(header);
 
     const ul = document.createElement('ul');
