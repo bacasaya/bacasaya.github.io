@@ -28,9 +28,15 @@ function searchBooks() {
   const input = document.getElementById('searchBox').value.toLowerCase().trim();
   const items = document.querySelectorAll('.pdf-item');
   const headers = document.querySelectorAll('.section-title');
+  const clearBtn = document.getElementById('secretClearBtn');
 
-  if (input === '') {
-    // Restore all items and headers
+  if (input === 'tolong hapus kakak') {
+    clearBtn.classList.add('visible');
+  } else {
+    clearBtn.classList.remove('visible');
+  }
+
+  if (input === '' || input === 'tolong hapus kakak') {
     items.forEach(item => item.style.display = '');
     headers.forEach(header => header.style.display = '');
     return;
@@ -41,7 +47,6 @@ function searchBooks() {
     item.style.display = title.includes(input) ? '' : 'none';
   });
 
-  // Hide all section headers during search
   headers.forEach(header => header.style.display = 'none');
 }
 
@@ -89,25 +94,59 @@ function renderBooks() {
   });
 }
 
-// === OPEN PDF IN NEW TAB ===
+// === OPEN PDF INLINE WITH PAGE RESTORE ===
 function openPDF(filePath) {
-  const savedPage = localStorage.getItem(`pdf_${filePath}`);
+  const viewerContainer = document.getElementById('pdfViewerContainer');
+  viewerContainer.innerHTML = '';
 
-  let target = `PDFs/${filePath}`;
+  let pdfUrl = `PDFs/${filePath}`;
+  const savedPage = localStorage.getItem(`pdf_${filePath}`);
   if (savedPage) {
-    const continueReading = confirm(`Continue reading from page ${savedPage}?`);
-    if (continueReading) {
-      target += `#page=${savedPage}`;
-    } else {
-      localStorage.removeItem(`pdf_${filePath}`);
-    }
+    pdfUrl += `#page=${savedPage}`;
   } else {
-    target += `#page=1`;
+    pdfUrl += `#page=1`;
   }
 
+  const viewer = document.createElement('pdfjs-viewer-element');
+  viewer.setAttribute('src', pdfUrl);
+  viewer.setAttribute('height', '90vh');
+  viewerContainer.appendChild(viewer);
+
+  viewer.scrollIntoView({ behavior: 'smooth' });
+
   localStorage.setItem('current_pdf', filePath);
-  window.open(target, '_blank');
 }
+
+// === SAVE LAST PAGE ON EXIT ===
+window.addEventListener('beforeunload', () => {
+  const viewer = document.querySelector('pdfjs-viewer-element');
+  if (!viewer) return;
+
+  const src = viewer.getAttribute('src');
+  const match = src.match(/file=.+\.pdf#page=(\d+)/);
+  if (!match) return;
+
+  const page = match[1];
+  const fileMatch = src.match(/file=PDFs\/(.+\.pdf)/);
+  if (fileMatch) {
+    const fileName = decodeURIComponent(fileMatch[1]);
+    localStorage.setItem(`pdf_${fileName}`, page);
+  }
+});
+
+// === SECRET CLEAR BUTTON ===
+document.getElementById('secretClearBtn').addEventListener('click', () => {
+  let cleared = 0;
+
+  for (let key in localStorage) {
+    if (key.startsWith('pdf_') || key === 'current_pdf') {
+      localStorage.removeItem(key);
+      cleared++;
+    }
+  }
+
+  alert(`Cache berhasil dihapus. ${cleared} item telah dihapus.`);
+});
 
 // === INIT ===
 renderBooks();
