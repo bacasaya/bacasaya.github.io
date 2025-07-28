@@ -1,13 +1,11 @@
 const toggle = document.getElementById('darkModeToggle');
 
-// === BOOK LIST ===
 const books = [
   "(Smart Sensors, Measurement and Instrumentation) Alice James, Avishkar Seth, Subhas Chandra Mukhopadhyay - IoT System Design_ Project Based Approach. 41-Springer (2021).pdf",
   "machine-learning-algorithm.pdf",
   "test.pdf"
 ];
 
-// === DARK MODE ===
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
   document.body.classList.add('dark');
@@ -23,7 +21,6 @@ toggle.addEventListener('change', () => {
   }
 });
 
-// === SEARCH ===
 function searchBooks() {
   const input = document.getElementById('searchBox').value.toLowerCase().trim();
   const items = document.querySelectorAll('.pdf-item');
@@ -50,11 +47,10 @@ function searchBooks() {
   headers.forEach(header => header.style.display = 'none');
 }
 
-// === GROUP & RENDER BOOKS ===
 function renderBooks() {
   const bookListDiv = document.getElementById('bookList');
   if (!bookListDiv) return;
-  bookListDiv.innerHTML = ''; // clear before rendering
+  bookListDiv.innerHTML = '';
 
   const grouped = {};
 
@@ -94,47 +90,14 @@ function renderBooks() {
   });
 }
 
-// === OPEN PDF INLINE WITH PAGE RESTORE ===
 function openPDF(filePath) {
-  const viewerContainer = document.getElementById('pdfViewerContainer');
-  viewerContainer.innerHTML = '';
-
-  let pdfUrl = `PDFs/${filePath}`;
-  const savedPage = localStorage.getItem(`pdf_${filePath}`);
-  if (savedPage) {
-    pdfUrl += `#page=${savedPage}`;
-  } else {
-    pdfUrl += `#page=1`;
-  }
-
-  const viewer = document.createElement('pdfjs-viewer-element');
-  viewer.setAttribute('src', pdfUrl);
-  viewer.setAttribute('height', '90vh');
-  viewerContainer.appendChild(viewer);
-
-  viewer.scrollIntoView({ behavior: 'smooth' });
-
+  const savedPage = localStorage.getItem(`pdf_${filePath}`) || 1;
+  const encodedFile = encodeURIComponent(filePath);
+  const viewerUrl = `baca.html?file=${encodedFile}#page=${savedPage}`;
+  window.open(viewerUrl, '_blank');
   localStorage.setItem('current_pdf', filePath);
 }
 
-// === SAVE LAST PAGE ON EXIT ===
-window.addEventListener('beforeunload', () => {
-  const viewer = document.querySelector('pdfjs-viewer-element');
-  if (!viewer) return;
-
-  const src = viewer.getAttribute('src');
-  const match = src.match(/file=.+\.pdf#page=(\d+)/);
-  if (!match) return;
-
-  const page = match[1];
-  const fileMatch = src.match(/file=PDFs\/(.+\.pdf)/);
-  if (fileMatch) {
-    const fileName = decodeURIComponent(fileMatch[1]);
-    localStorage.setItem(`pdf_${fileName}`, page);
-  }
-});
-
-// === SECRET CLEAR BUTTON ===
 document.getElementById('secretClearBtn').addEventListener('click', () => {
   let cleared = 0;
 
@@ -148,5 +111,4 @@ document.getElementById('secretClearBtn').addEventListener('click', () => {
   alert(`Cache berhasil dihapus. ${cleared} item telah dihapus.`);
 });
 
-// === INIT ===
 renderBooks();
