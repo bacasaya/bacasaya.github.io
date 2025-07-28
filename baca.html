@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+  <div class="viewer-header">
+    <h2 id="pdfTitle">PDF Viewer</h2>
+    <a class="back-button" href="index.html">← Back to Library</a>
+  </div>
+
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner" role="status" aria-label="Loading PDF...">
+      <svg viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+    </div>
+    <div id="loadingPercent" class="loading-percent">0%</div>
+  </div>
+
+  <iframe id="pdfFrame" style="width:100%; height:calc(100vh - 50px); border:none;"></iframe>
+  <div id="navLeft"></div>
+  <div id="navRight"></div>
+  <script src="JS/baca.js"></script>
+</body>
+</html>
