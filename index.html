@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Baca Saya - a PDF Library</title>
   <link rel="stylesheet" href="CSS/style.css">
+
+  <!-- PDF.js Viewer Web Component -->
+  <script type="module" src="JS/pdfjs-viewer-element.js"></script>
+
+  <!-- PDF.js Core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
   <div class="header">
@@ -16,7 +22,10 @@
 
   <input type="text" id="searchBox" onkeyup="searchBooks()" placeholder="Search books...">
 
+  <button id="secretClearBtn" class="fade-button">Hapus Cache / LocalStorage</button>
+
   <div id="bookList"></div>
+  <div id="pdfViewerContainer"></div>
 
   <script src="JS/script.js"></script>
 </body>
