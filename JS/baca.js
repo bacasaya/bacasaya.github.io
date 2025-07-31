@@ -16,7 +16,7 @@ if (!file) {
     location.origin + '/PDFs/' + decodedFile
   )}#page=${savedPage}`;
 
-  // Show fake loading progress
+  // Simulate loading progress
   let percent = 0;
   const interval = setInterval(() => {
     if (percent < 90) {
@@ -25,7 +25,6 @@ if (!file) {
     }
   }, 100);
 
-  // Listen for viewer events
   window.addEventListener("message", (event) => {
     if (!event.data || typeof event.data !== "object") return;
 
@@ -43,16 +42,14 @@ if (!file) {
         <div class="error-message">
           <h3>Gagal memuat PDF</h3>
           <p>File <strong>${decodedFile}</strong> tidak tersedia atau rusak.</p>
-          <a href="index.html" class="back-button">← Kembali ke Daftar</a>
         </div>
       `;
     }
   });
 
-  // Set iframe source after listener is ready
   iframe.src = viewerUrl;
 
-  // Fallback: if no message received within 10s
+  // Fallback after 10 seconds
   setTimeout(() => {
     clearInterval(interval);
     loadingPercent.textContent = `100%`;
@@ -67,7 +64,6 @@ if (!file) {
           <div class="error-message">
             <h3>Gagal memuat PDF</h3>
             <p>File <strong>${decodedFile}</strong> tidak dapat ditampilkan.</p>
-            <a href="index.html" class="back-button">← Kembali ke Daftar</a>
           </div>
         `;
       } else {
@@ -78,23 +74,20 @@ if (!file) {
         <div class="error-message">
           <h3>Gagal memuat PDF</h3>
           <p>File <strong>${decodedFile}</strong> tidak dapat ditampilkan.</p>
-          <a href="index.html" class="back-button">← Kembali ke Daftar</a>
         </div>
       `;
     }
   }, 10000);
 }
 
-// Apply dark mode if needed
-const theme = localStorage.getItem('theme');
-if (theme === 'dark') {
+// Dark mode support
+if (localStorage.getItem('theme') === 'dark') {
   document.body.classList.add('dark');
 }
 
-document.getElementById('navLeft').addEventListener('click', () => {
-  iframe.contentWindow.postMessage({ action: 'prev' }, '*');
-});
-
-document.getElementById('navRight').addEventListener('click', () => {
-  iframe.contentWindow.postMessage({ action: 'next' }, '*');
+// Automatically request fullscreen
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
 });
