@@ -848,21 +848,22 @@ See https://github.com/adobe-type-tools/cmap-resources
   <button class="nav-btn" onclick="PDFViewerApplication.page++">Next</button>
 </div>
 <script>
-  document.addEventListener("webviewerloaded", function () {
-    const app = window.PDFViewerApplication;
+  const waitForApp = setInterval(() => {
+    if (window.PDFViewerApplication?.eventBus) {
+      clearInterval(waitForApp);
 
-    app.eventBus.on("pagechanging", function (e) {
-      window.parent.postMessage(
-        {
-          source: "pdf-reader",
-          type: "pagechange",
-          pageNumber: e.pageNumber,
-          filename: app.url?.split("/").pop() || "unknown"
-        },
-        "*"
-      );
-    });
-  });
+      const app = window.PDFViewerApplication;
+      app.eventBus.on("pagechanging", function (evt) {
+        const page = evt.pageNumber;
+        const url = app.url || '';
+        window.parent.postMessage({
+          type: 'save-page',
+          filename: url.split('/').pop(),
+          page: page
+        }, '*');
+      });
+    }
+  }, 100);
 </script>
 </body>
 </html>
