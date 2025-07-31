@@ -34,13 +34,55 @@ See https://github.com/adobe-type-tools/cmap-resources
   <link rel="stylesheet" href="viewer.css">
 
   <script src="viewer.mjs" type="module"></script>
-    <style>
+  <style>
   #toolbarContainer,
   #secondaryToolbarToggle,
-  #sidebarContainer {
+  #sidebarContainer,
+  #viewBookmark,
+  #loadingBar,
+  #findbar,
+  .toolbar,
+  .hiddenMediumView,
+  .hiddenSmallView {
     display: none !important;
   }
+
+  #viewerContainer {
+    top: 0;
+    bottom: 0;
+    height: 100vh !important;
+  }
+
+  body {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  #pageControls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .nav-btn:hover {
+    background: black;
+  }
 </style>
+
 </head>
 
 <body tabindex="0">
@@ -801,6 +843,9 @@ See https://github.com/adobe-type-tools/cmap-resources
     });
   });
 </script>
-
+<div id="pageControls">
+  <button class="nav-btn" onclick="PDFViewerApplication.page--">← Prev</button>
+  <button class="nav-btn" onclick="PDFViewerApplication.page++">Next →</button>
+</div>
 </body>
 </html>
