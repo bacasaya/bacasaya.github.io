@@ -23,35 +23,33 @@
   <iframe id="pdfFrame"></iframe>
 
   <script>
-    const file = new URLSearchParams(location.search).get('file');
-    const decodedFile = decodeURIComponent(file || '');
-    const savedPage = localStorage.getItem(`pdf_${decodedFile}`) || 1;
+  const file = new URLSearchParams(location.search).get('file');
+  const decodedFile = decodeURIComponent(file || '');
+  const savedPage = localStorage.getItem(`pdf_${decodedFile}`) || 1;
 
-    if (file) {
-      const viewerUrl = `pdfjs/web/viewer.html?file=${encodeURIComponent(
-        location.origin + '/PDFs/' + decodedFile
-      )}#page=${savedPage}`;
+  if (file) {
+    const viewerUrl = `pdfjs/web/viewer.html?file=${encodeURIComponent(
+      location.origin + '/PDFs/' + decodedFile
+    )}#page=${savedPage}`;
 
-      const iframe = document.getElementById('pdfFrame');
-      iframe.src = viewerUrl;
+    const iframe = document.getElementById('pdfFrame');
+    iframe.src = viewerUrl;
 
-      window.addEventListener("message", (event) => {
-        const data = event.data;
-        if (data && data.source === "pdf-reader" && data.type === "pagechange") {
-          const currentPage = data.pageNumber;
-          const key = `pdf_${decodedFile}`;
-          localStorage.setItem(key, currentPage);
-        }
-      });
+    window.addEventListener('message', (event) => {
+      const data = event.data;
+      if (data?.type === 'save-page' && data.filename && data.page) {
+        localStorage.setItem(`pdf_${data.filename}`, data.page);
+      }
+    });
 
-      document.addEventListener("DOMContentLoaded", () => {
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        }
-      });
-    } else {
-      document.body.innerHTML = "<h2>PDF not specified</h2>";
-    }
-  </script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    });
+  } else {
+    document.body.innerHTML = "<h2>PDF not specified</h2>";
+  }
+</script>
 </body>
 </html>
