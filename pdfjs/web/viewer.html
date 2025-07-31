@@ -844,8 +844,25 @@ See https://github.com/adobe-type-tools/cmap-resources
   });
 </script>
 <div id="pageControls">
-  <button class="nav-btn" onclick="PDFViewerApplication.page--">← Prev</button>
-  <button class="nav-btn" onclick="PDFViewerApplication.page++">Next →</button>
+  <button class="nav-btn" onclick="PDFViewerApplication.page--">Prev</button>
+  <button class="nav-btn" onclick="PDFViewerApplication.page++">Next</button>
 </div>
+<script>
+  document.addEventListener("webviewerloaded", function () {
+    const app = window.PDFViewerApplication;
+
+    app.eventBus.on("pagechanging", function (e) {
+      window.parent.postMessage(
+        {
+          source: "pdf-reader",
+          type: "pagechange",
+          pageNumber: e.pageNumber,
+          filename: app.url?.split("/").pop() || "unknown"
+        },
+        "*"
+      );
+    });
+  });
+</script>
 </body>
 </html>
