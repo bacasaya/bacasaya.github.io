@@ -170,7 +170,7 @@ input:checked + .slider:before {
   align-items: center;
   z-index: 9999;
   transition: opacity 0.3s ease;
-  pointer-events: all;
+  pointer-events: none !important; /* Allow user interaction during loading */
 }
 
 .loading-overlay.fade-out {
