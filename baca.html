@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Reading Mode</title>
+  <title>Baca Saya</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     html, body {
@@ -35,17 +35,15 @@
       const iframe = document.getElementById('pdfFrame');
       iframe.src = viewerUrl;
 
-      // Listen to page changes inside the viewer
       window.addEventListener("message", (event) => {
-        if (!event.data || typeof event.data !== "object") return;
-
-        if (event.data.source === 'pdf.js' && event.data.type === 'pagechanging') {
-          const currentPage = event.data.pageNumber;
-          localStorage.setItem(`pdf_${decodedFile}`, currentPage);
+        const data = event.data;
+        if (data && data.source === "pdf-reader" && data.type === "pagechange") {
+          const currentPage = data.pageNumber;
+          const key = `pdf_${decodedFile}`;
+          localStorage.setItem(key, currentPage);
         }
       });
 
-      // Go fullscreen
       document.addEventListener("DOMContentLoaded", () => {
         if (document.documentElement.requestFullscreen) {
           document.documentElement.requestFullscreen();
